@@ -1,0 +1,31 @@
+services:
+
+  postgresql:
+    image: 'postgres:latest'
+    container_name: postgresql_docker_symfony
+    restart: always
+    volumes:
+      - /pendrive/profesional/dockervolumes/postgre_symfony:/var/lib/postgresql/data'
+    environment:
+      - POSTGRES_PASSWORD=qaz123
+    ports:
+      - '5432:5432'
+    networks:
+      - symfony
+                  
+  www:
+    build: php
+    container_name: www_docker_symfony
+    ports:
+      - "8081:80"
+    volumes:
+      - /pendrive/profesional/dockervolumes/apache_docker_symfony:/etc/apache2/sites-enabled
+      - /pendrive/profesional/sedronar/symfony:/var/www
+    restart: always
+    depends_on:
+      - postgresql
+    networks:
+      - symfony
+
+networks:
+  symfony:
